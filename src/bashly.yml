@@ -1,0 +1,97 @@
+name: tm
+help: "Taskmage: Taskwarrior-inspired task management tool following the todo.txt specification"
+version: 0.1.0
+
+dependencies:
+  cat: "taskmage depends on the GNU coreutils"
+  sed: "taskmage depends on the GNU coreutils"
+  grep: "taskmage depends on the GNU coreutils" 
+  date: "taskmage depends on the GNU coreutils" 
+  echo: "taskmage depends on the GNU coreutils" 
+  wc: "taskmage depends on the GNU coreutils" 
+  tput: "taskmage depends on ncurses"
+  column: "taskmage depends on util-linux"
+
+environment_variables:
+- name: taskmage_todofile
+  help: "Path to todo file to be used by taskmage\n(recommended: ~/Documents/todo/todo.txt)"
+  required: true
+- name: taskmage_donefile
+  help: "Path to done file to be used by taskmage\n(recommended: ~/Documents/todo/done.txt)"
+  required: true
+- name: taskmage_deletedfile
+  help: "Path to deleted file to be used by taskmage\n(recommended: ~/Documents/todo/deleted.txt)"
+  required: true
+
+commands:
+- name: add
+  alias: a
+  help: Add a task
+  args:
+    - name: task 
+      required: true
+      repeatable: true
+  examples:
+  - tm add take the bins out
+  - tm add buy a loaf of bread +groceries
+  - tm add call dad @phone
+
+- name: list
+  alias: [ls, l]
+  help: List tasks
+  default: force
+  args:
+      - name: task_list
+        allowed:
+        - all
+        - a
+        - archived
+        - x
+        - complete
+        - c
+        - deleted
+        - del
+        - removed
+        - rm
+        - pending
+        - p
+        - done
+        - d
+  examples:
+  - tm list
+  - tm list deleted
+  - tm list all
+
+- name: done
+  alias: [d, finish, f]
+  help: Mark a task as completed
+  args:
+    - name: task_id 
+      required: true
+  examples:
+  - tm done 1
+
+- name: delete
+  alias: [del, remove, rm]
+  help: Delete a task - move to deleted file
+  args:
+    - name: task_id 
+      required: true
+  examples:
+  - tm delete 1
+  - tm rm 1
+
+- name: purge
+  alias: p
+  help: Purge a task - remove from deleted file
+  args:
+    - name: task_id 
+      required: true
+  examples:
+  - tm purge 1
+
+- name: archive
+  alias: x
+  help: Archive completed tasks - move from todo file to done file
+  examples:
+  - tm archive
